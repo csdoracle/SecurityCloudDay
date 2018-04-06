@@ -33,7 +33,6 @@ Here is the list of topics we will cover in the demonstration -
 
 * Branding and Login Customization
 
-	* [Branding Customization]()
 	* [Enhanced Login Experience](contents/CustomLogin.md)
 
 * **B2C:** [Self-Registration](contents/SelfRegister.md)
