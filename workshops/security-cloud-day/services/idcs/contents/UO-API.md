@@ -69,15 +69,7 @@ Some minimal setup in IDCS is needed for the flow.
 Follow the video below to create your App in IDCS.
 
 
-```python
-HTML('<iframe width="560" height="315" src="https://www.youtube.com/embed/A2LiNJRRINk?rel=0&amp;controls=1&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>')
-```
-
-
-```python
-HTML('<iframe width="560" height="315" src="https://docs.oracle.com/en/cloud/paas/identity-cloud/17.4.2/rest-api/OATOAuthClientWebApp.html#GUID-51E5C29A-6B7E-487A-8832-5D709410C16A__RegisterAnOAuthClientWebApplication-29DDFF36" frameborder="0" allowfullscreen></iframe>')
-```
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/A2LiNJRRINk?rel=0&amp;controls=1&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
 
 
 
