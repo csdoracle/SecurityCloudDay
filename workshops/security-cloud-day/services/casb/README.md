@@ -1,5 +1,3 @@
-Updated: Feb 16, 2018
-
 ## **Introduction**
 ___
  The purpose of these self-directed exercises is to provide participants hands-on experience using the Oracle CASB Cloud Service trail account to perform some key CASB use cases 

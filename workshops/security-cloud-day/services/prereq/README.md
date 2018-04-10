@@ -1,6 +1,3 @@
-![](images/pre-req/header.png) 
-
-
 # Introduction
 
 The purpose of this lab guide is to walk customers through the steps necessary to request an Oracle Cloud Trial account as well as some of the services which will be required for lab exercises which follow.

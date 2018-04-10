@@ -1,7 +1,3 @@
-![](images/300/300-header.png)  
-
-Update: January 04, 2018
-
 ## Introduction
 
 The purpose of this lab is to give the participant hands on experience of Security Monitoring and Analytics Cloud Service and how they can leverage this service to enable rapid detection and investigation of security threats. 
