@@ -12,14 +12,6 @@ This lab will be broken up into two parts. **Part A** will consisit of a simple 
 
 In this lab, we will cover –
 
-Part A
-
-   - Accessing the shared SMA environment
-   - Evaluating users with associated threats
-   - Understanding the value of the OMC unified platform
-   
-Part B
-
    - How to access your SMA environment
    - Enabling SMA service
    - Reviewing pre-configured correlation rules
@@ -31,71 +23,10 @@ Part B
 
 The following are minimum requirements for this lab
    - Oracle Cloud Trial account with OMC instance provisioned. Refer to [How to request your free trial account](https://csdoracle.github.io/Cloud-Security-Day/CSD-SETUP.html) if you haven't already done so.
-<<<<<<< HEAD
-   - Sample data: Staged on the linux host provided (Part B only)
-   - A computer with an internet connection and an SSH client (Part B only)
+   - Sample data: download [here](resources/sma-sample.zip)
+   - A linux host with internet connection - must have **cURL** and **unzip** installed
    
-## Part A
-### Accessing the shared SMA environment
 
-1. Click on the following link which will take you to the shared SMA environment
-   - https://clouddays-natdsecurity.itom.management.us2.oraclecloud.com/emsaasui/emcpdfui/welcome.html?DOMAIN-INSTANCE-NAME=clouddays
-
-1. Sign in with the username and password provided by the session proctor
-
-1. This is the OMC landing page showing all the available services. Let’s click on “Security Monitoring and Analytics” to access the SMA Cloud Service
-   - SMA is a unified SIEM and UEBA cloud solution that helps to identify advanced threats and enables faster time to detection by leveraging machine learning techniques along with very high performance and scale by being built on a big data platform.
-   
-    ![](images/300/300-039.png)
-
-### Evaluating users with associated threats
-
-1. You are now looking at the main SMA Landing page showing the “Users” Dashboard. Take a minute to review the different dashboards and corresponding data shown for the time period selected.
-   - Set the time period in the top right of the screen, selecting the time range of “Last 14 Days”
-   - Users – shows the total number of risky users
-   - Threats - shows total, critical, high, medium and low risk threats
-   - Assets – shows the total number of risky assets
-   
-    ![](images/300/300-040.png)
-
-1. In the Users area of the page, click the number below risky to drill fown in to Risky users
-
-1. At the bottom of the page you can see a summary of risky users which is sorted with the most risky users at the top of the list. We can see that Mary Baker has the highest number of threats. Note that we can see Mary is a member of the Marketing department. 
-
-    ![](images/300/300-041.png)
-
-1. Click on mary.baker@acmeloric.com to investigate threats by Mary
-
-1. Here we can get more details on Mary. We see her organization, manager, whether she is active employee, her access is locked or not, phone number, email and location. Summary View shows:
-   - Threats by category
-   - Top Risky Assets by Threats
-   - Threats by Asset Type
-   
-    ![](images/300/300-042.png)
-
-1. Click on the Threats tab in the User details window.
-   - We are now looking at the Threat timeline and we can view this timeline by Risk Level or we can change the view and view the timeline by Threat category to view the events classified in the kill chain
-   
-1. In the Threat Details section near the bottom of the page, we can see the various threats associated with user Mary Baker. Two threats have been classified as “infiltration” type events and one has been classified as “reconnaissance”
-
-    ![](images/300/300-043.png)
-	
-   - Lets drill down and get some more information about the BruteForceAttack event. Click on the event id name in the ID column.
-   
-1. You are now looking at the expanded Threat Details pane which is giving you yet more details of the individual events comprising this threat.
-
-    ![](images/300/300-044.png)
-
-### Understanding the value of the OMC unified platform
-
-1. Click the Log link
-
-1. Another tab is now open in your browser and we are looking at the individual log events in Log Analytics.
-   - This is great strength of our unified platform. Typically a security analyst may have to switch between multiple systems when investigating a security incident. Notifications may be sent by one system but log data may be contained in another system. Here we have easily switched to the log aggregator where we could perform yet further analysis on the events, searching for other types of related activity.
-   
-    ![](images/300/300-045.png)  
-   
-## Part B
 ## STEP 1 - Accessing your Environment & Initial Configuration
 
 ### Accessing your OMC Instance
@@ -108,13 +39,14 @@ The following are minimum requirements for this lab
 
 	![](images/300/300-002.png)
 
-1. You’re are now ready to start using any of the services shown below. Our focus with be narrowed to “Security Monitoring and Analytics”
+1. You’re are now ready to start using any of the services shown below. Our focus with be narrowed to **Security Monitoring and Analytics**
 
 	![](images/300/300-003.png)
 	
 ### Instance Configuration
 
 Prior to using the new service the following minimum configuration:
+
 1. Enable Security Monitoring & Analytics
 1. SMA alert rules
 
@@ -200,16 +132,17 @@ There are multiple methods for getting data into your environment, the most comm
 
 ### Connecting to the Linux Host to Upload Test Data
 
-On the shared Linux Server, you will find the sample data and upload scripts for the lab under /u02/stage. The host IP address and credentials will be provided by the instructor before the lab. 
+On your linux host, copy the sample data and upload scripts for the lab under /u01/stage. 
 
-1.	Obtain the Linux server IP address and password from the instructor
-1.	Using your preferred SSH utility from your laptop, login with OS username "cdsma"
+- Create the directory `/u01/stage` on your linux host
+- Copy the [zip](resources/sma-sample.zip) file to `/u01/stage`
+- Unzip the file
 
 ### Adding User Context to OMC
 
 In addition to log data, sample user context data will be added to OMC as well to provide a richer experience by mapping users identified in security logs to detailed corporate directory sourced from the company’s Identity Service. In real production setting, this data will come from an Identity Service such as IDCS and by means of integration.
 
-1.	In your SSH session, navigate to /u02/stage 
+1.	In your linux host session, navigate to /u01/stage 
 1.	From [My Cloud Services Dashboard](https://myservices.us2.oraclecloud.com/mycloud/cloudportal/dashboard), toggle "Identity Domain" selector to your "Traditional" domain, then click on `Management Cloud` as shown below
 
 	![](images/300/300-017a.png)
