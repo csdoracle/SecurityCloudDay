@@ -7,14 +7,14 @@ ___
 ## **Objectives**
 ___
 The exercises will cover the following CASB features and concepts:
- - The CASB Cloud Service Dashboard
  - Sanctioned Application On-boarding
+ - The CASB Cloud Service Dashboard
  - Analyzing Security Controls
  - Policies
  - CASB Discovery (Shadow IT)
  - Risk Events & User Risk
  - Event Management
- - Reports
+
 
 ## **Prerequisites**
 ___
@@ -66,25 +66,129 @@ Create a dedicated user for Oracle CASB Cloud Service in the Salesforce account 
 
 * Respond to the email from Salesforce to finish setup for the new Oracle CASB Cloud Service user. You need to create a login password and a password retrieval question.
 
-## **Exercise 1. CASB Cloud Service Dashboard**
+## **Exercise 1. Sanctioned Application Onboarding**
+___
+### **Overview**:
+
+In this session, you will be using the Oracle CASB Cloud Service UI to onboard a Salesforce Developer Account into your Oracle CASB Cloud Service tenant. 
+
+### **Exercise**:
+
+#### **STEP 1** Pre-configure your Salesforce Developer Account for this exercise:
+
+Sign into your Salesforce account and navigate to the Setup section. 
+
+We will configure some sample security settings within Salesforce. In the setup menu, use the upper-left Quick Find box to search for *Password Policies* .
+
+ ![](images/CASB/sfSetup.png)
+
+![](images/CASB/01-quick-find-box.png)
+Under “*Password Policies*” set user passwords to "*Never Expire*".
+
+![](images/CASB/01-password-never-expire.png)
+Under “*Password Policies*” choose to not enforce password history.
+
+![](images/CASB/01-password-never-remember.png)
+
+At the bottom of the “*Password Policies*” page, click the "*Save*" button.
+
+![](images/CASB/sfLogout.png)
+
+#### **STEP 2**: Sign on to Oracle CASB Cloud Service
+
+Using your preferred browser navigate to the Oracle CASB Service within your Oracle Free Cloud Trial account . If it's the first time you sign in to the CASB service you'll land on the "*Applications*" view in the CASB UI . 
+
+#### **STEP 3**: Click on the "*Add an App*" menu item. 
+
+![](images/CASB/Add_App.jpg)
+
+#### **STEP 4**: Choose to add a new Salesforce instance by clicking on the Salesforce icon, and click *Next*.
+
+![](images/CASB/salesforce_app_badge.png)
+
+#### **STEP 5**: Provide the name of the Salesforce instance.
+
+CASB cloud service allows you to add multiple accounts/tenants of any given cloud service as long as each instance has a unique name.
+Enter a unique name for the instance for example: *YOURNAME_SFDC*. Set all other values as shown in the following screen capture.
+Press the "*Next*" button to proceed to the next step of the "*Register an app instance*" wizard
+
+![](images/CASB/01-add-salesforce-app.png)
+
+> If a Salesforce account is federated with a supported Cloud Identity Provider ( IdP ) you can select the "*The users of this app instance log in using single sign-on through an identity provider*" checkbox and select the Identity Provider being used from a list of pre-configured providers
+
+#### **STEP 6**: Select Security Control Monitoring Option
+
+Security controls will be explained in more detail in a later exercise but suffice it to say for now that Enterprise Cloud Applications have security-related settings, such as password complexity requirements and idle session timeouts that Oracle CASB Cloud Service can monitor and change according to a baseline configuration, for a particular Enterprise Cloud Application, that is defined in CASB Cloud Service 
+
+On this screen, we can choose to either:
+
+"*Monitor-only*" in which case Oracle CASB Cloud Service reports on these security control values, but doesn’t change them in the cloud application.
+
+or 
+
+"*Monitor and push*" the preferred values to the cloud application. At registration time, Oracle CASB Cloud Service ensures that your cloud application has your preferred security configuration values. After registration, Oracle CASB Cloud Service reports on changes to these values. 
+
+![](images/CASB/pushAndMonitor.png)
+Select the "*Push controls and monitor*" radio button and then press the "*Next*" button.
+
+#### **STEP 7**: Select "*Standard*" Security Controls Policy
+
+![](images/CASB/salesforce_controls.png)
+
+Because the monitor and push option was selected an "*Approval*" radio button will be displayed that will prompt you to acknowledge and consent to CASB Cloud Service making changes in the target service (Salesforce in this case) to bring its security configuration in line with the selected Security Control baseline. 
+
+Click the "*Next*" button 
+
+>You can review the Controls begin monitored and enforced under the *Standard* and *Stringent* Security Controls baselines. You can also define your own security control baseline by clicking on the *Custom* radio button and configuring the security controls you would like to enforce for a given sanctioned app. 
+
+#### **STEP 8**: Authenticate to Salesforce and allow CASB to access your Salesforce Account 
+You will be redirected to Salesforce to login, and you will see the following screen in the process:
+
+![](images/CASB/01-please-wait-screen.png)
+
+Use the credentials for the dedicated CASB Salesforce user you created in Step 3 of the prerequisites. Upon log in, you will be asked to confirm that you want to grant access to the Oracle CASB Cloud Service:
+
+>NOTE: Once logged in, Salesforce may ask you to verify your identity by sending a code to the email address used to sign-up. If so, retrieve the one-time verification code from your email.
+
+![](images/CASB/01-grant-access.png)
+
+> This is part of the Salesforce Authorization code OAuth flow that CASB utilize to gain authorization, (OAuth Access Token) to access the relevant Salesforce APIs it will use to integrate with Salesforce.
+
+Click the *Allow* button to allow the access. You will be redirected back to the Oracle CASB Cloud Service. 
+
+Then click on the "*Done*" button on the following screen that informs you about the data collection delay that you should expect 
+
+Next , click  on   "*Applications*" using the Navigation Bar on the left of the CASB UI .
+
+![](images/CASB/clock-icon.jpg) CASB will now start the initial data collection for the new application . You can expect this initial data collection to complete within 30 to 120 minutes. While the initial data collection is taking place, the application will be tagged with the “*NEW*” banner in the application list. 
+
+ ![](images/CASB/01-new-banner.png)
+
+After the data load has taken place, the application will shed the “*NEW*” banner
+
+#### **STEP 9**: Review changes made in Salesforce to bring it inline with the Security Control baseline we selected.
+
+Recall that we changed the password policy in Salesforce to never expire however notice that the security control we selected with the "*Standard*" baseline requires the password to expire in 90 days. As the Salesforce service is being on-boarded **CASB will access the Salesforce APIs to change the password policy, among many other configuration settings, in Salesforce to comply with the security control baseline we selected in CASB**. You can verify the changes by logging in to Salesforce and navigating to the "*Setup*" menu, then use the upper-left "*Quick Find*" box to search for “*Password Policies*” (no quotes) and review the "*User passwords expire in*" field to verify that it has been **changed back** to expire in 90 days, also notice that the enforce password history has been changed back to "*3 passwords remembered*”. 
+
+#### **STEP 10**: View Risk Events from Initial Scan
+
+**After the initial load is complete**, we can click on the new application. Since we selected to have the CASB Cloud Service push the security control setting to Salesforce the new Salesforce instance should not have any violations and should appear in the low risk services category ( more on this in the next section ). 
+ 
+ > If we selected the "*Monitor Only*" option instead of the "*Push Controls and Monitor*" option in step 4 we would have had security control violations appear in the CASB dashboard for the Salesforce tenant after the initial scan. 
+ 
+## **Exercise 2. CASB Cloud Service Dashboard**
 ___
 ### **Overview**:
 This session will familiarize you with the Oracle CASB Cloud Service User Interface and dashboard
 
 ### **Exercise**:
 
-#### **STEP 1**: Sign on to Oracle CASB Cloud Service
+#### **STEP 1**: Navigate to the "*Dashboard*" 
 
-Using your preferred browser navigate to the Oracle CASB Service home URL at  https://trial.palerra.net/ . 
-You'll be presented with the following login form:
-
-![](images/CASB/66D12B19-6081-445A-9562-B496AFBBE1B3.png)  
-
-> If you are following these instructions as part of the Oracle Cloud Security workshop then you'll recieve a registration confirmation e-mail that will contain  CASB  login credentials to a **shared** workshop CASB tenant that will be used in the course of the workshop. **Use the credentials of the shared tenant you recieved to perform this exercise.**
+Expand the navigation menu on the left of the CASB UI and select the "*Dashboard*" option.
 
 #### **STEP 2**: Review select items on the CASB Dashboard
 
-The Dashboard is the first UI view you will see in the Oracle CASB Cloud Service after you've logged into the service.
 The purpose of the dashboard is to give the user a summary view of various important Cloud service security related information. Some of the more important items on the dashboard are:
 
 #### Service Health Indicators
@@ -119,117 +223,6 @@ The Access Map shows points of origin for both normal (green dot) and suspicious
 
 > The other summary cards on the Dashboard Summary tab, such as Suspicious and normal IP addresses, display statistics for specific types of activity that may or may not be suspicious. For each summary card, you can :  View the summary statistics displayed, Hover over parts of the card to see additional information in pop-ups, and to identify links, click any link in the card to see more detailed information, click the Help icon Image of Help icon in the upper-right corner to see online help about the type of information displayed in any particular card.
 
-## **Exercise 2. Sanctioned Application Onboarding**
-___
-### **Overview**:
-In this session, you will be using the Oracle CASB Cloud Service UI to onboard a Salesforce Developer Account into your Oracle CASB Cloud Service tenant. 
-
-### **Exercise**:
-
-#### **STEP 1** Pre-configure your Salesforce Developer Account for this exercise:
-
-Sign into your Salesforce account and navigate to the Setup section. 
-
- We will configure some sample security settings within Salesforce. In the setup menu, use the upper-left Quick Find box to search for *Password Policies* .
-
- ![](images/CASB/sfSetup.png)
-
-![](images/CASB/01-quick-find-box.png)
-Under “*Password Policies*” set user passwords to "*Never Expire*".
-
-![](images/CASB/01-password-never-expire.png)
-Under “*Password Policies*” choose to not enforce password history.
-
-![](images/CASB/01-password-never-remember.png)
-
-At the bottom of the “*Password Policies*” page, click the "*Save*" button.
-
-**Make sure that you log out from this and other Salesforce accounts and clear the browser cache before continuing with the rest of the exercise.**
-
-![](images/CASB/sfLogout.png)
-
-#### **STEP 2**: Click on the "*Add an App*" menu item. 
-> If you are following these instructions in the context of a workshop you may be signed into CASB, after completing exersise 1 , using the **shared** tenant credentials assigned to you. However, exercise 2 should be performed using **your own Oracle Cloud Trial tenant account** . To accomplish this start a new private browsing window in your browser ( called incognito window in Chrome) and log into https://trial.palerra.net/  with the credentials of your free Oracle Cloud trial account . Now continue with step 2 in your own trial CASB account.
-
-![](images/CASB/Add_App.jpg)
-
-#### **STEP 3**: Choose to add a new Salesforce instance by clicking on the Salesforce icon, and click *Next*.
-
-![](images/CASB/salesforce_app_badge.png)
-
-#### **STEP 4**: Provide the name of the Salesforce instance.
-
-CASB cloud service allows you to add multiple accounts/tenants of any given cloud service as long as each instance has a unique name.
-Enter a unique name for the instance for example: *YOURNAME_SFDC*. Set all other values as shown in the following screen capture.
-Press the "*Next*" button to proceed to the next step of the "*Register an app instance*" wizard
-
-![](images/CASB/01-add-salesforce-app.png)
-
-> If a Salesforce account is federated with a supported Cloud Identity Provider ( IdP ) you can select the "*The users of this app instance log in using single sign-on through an identity provider*" checkbox and select the Identity Provider being used from a list of pre-configured providers
-
-#### **STEP 5**: Select Security Control Monitoring Option
-
-Security controls will be explained in more detail in a later exercise but suffice it to say for now that Enterprise Cloud Applications have security-related settings, such as password complexity requirements and idle session timeouts that Oracle CASB Cloud Service can monitor and change according to a baseline configuration, for a particular Enterprise Cloud Application, that is defined in CASB Cloud Service 
-
-On this screen, we can choose to either:
-
-"*Monitor-only*" in which case Oracle CASB Cloud Service reports on these security control values, but doesn’t change them in the cloud application.
-
-or 
-
-"*Monitor and push*" the preferred values to the cloud application. At registration time, Oracle CASB Cloud Service ensures that your cloud application has your preferred security configuration values. After registration, Oracle CASB Cloud Service reports on changes to these values. 
-
-![](images/CASB/pushAndMonitor.png)
-Select the "*Push controls and monitor*" radio button and then press the "*Next*" button.
-
-#### **STEP 6**: Select "*Standard*" Security Controls Policy
-
-![](images/CASB/salesforce_controls.png)
-
-Because the monitor and push option was selected an "*Approval*" radio button will be displayed that will prompt you to acknowledge and consent to CASB Cloud Service making changes in the target service (Salesforce in this case) to bring its security configuration in line with the selected Security Control baseline. 
-
-Click the "*Next*" button 
-
->You can review the Controls begin monitored and enforced under the *Standard* and *Stringent* Security Controls baselines. You can also define your own security control baseline by clicking on the *Custom* radio button and configuring the security controls you would like to enforce for a given sanctioned app. 
-
-#### **STEP 7**: Authenticate to Salesforce and allow CASB to access your Salesforce Account 
-You will be redirected to Salesforce to login, and you will see the following screen in the process:
-
-![](images/CASB/01-please-wait-screen.png)
-
-Use the credentials for the Salesforce tenant that has been assigned to you during the workshop. Upon log in, you will be asked to confirm that you want to grant access to the Oracle CASB Cloud Service:
-
-> If you signed-up for your own Salesforce account use the credentials for the user you created in the Prerequisites section's step 3 in the instructions above. 
-
->NOTE: Once logged in, Salesforce may ask you to verify your identity by sending a code to the email address used to sign-up. If so, retrieve the one-time verification code from your email. This will not be required if you follow these instructions as part of a workshop where you recieved an assigned Salesforce Developer account. 
-
-![](images/CASB/01-grant-access.png)
-
-> This is part of the Salesforce Authorization code OAuth flow that CASB utilize to gain authorization, (OAuth Access Token) to access the relevant Salesforce APIs it will use to integrate with Salesforce.
-
-Click the *Allow* button to allow the access. You will be redirected back to the Oracle CASB Cloud Service. 
-
-Then click on the "*Done*" button on the following screen that informs you about the data collection delay that you should expect 
-
-Next , click  on   "*Applications*" using the Navigation Bar on the left of the CASB UI .
-
-![](images/CASB/clock-icon.jpg) CASB will now start the initial data collection for the new application . You can expect this initial data collection to complete within 30 to 120 minutes. While the initial data collection is taking place, the application will be tagged with the “*NEW*” banner in the application list. 
-
- ![](images/CASB/01-new-banner.png)
-
->In our testing, the initial data load usually takes approximately 30 minutes to complete.
-
-After the data load has taken place, the application will shed the “*NEW*” banner
-
-#### **STEP 8**: Review changes made in Salesforce to bring it inline with the Security Control baseline we selected.
-
-Recall that we changed the password policy in Salesforce to never expire however notice that the security control we selected with the "*Standard*" baseline requires the password to expire in 90 days. As the Salesforce service is being on-boarded **CASB will access the Salesforce APIs to change the password policy, among many other configuration settings, in Salesforce to comply with the security control baseline we selected in CASB**. You can verify the changes by logging in to Salesforce and navigating to the "*Setup*" menu, then use the upper-left "*Quick Find*" box to search for “*Password Policies*” (no quotes) and review the "*User passwords expire in*" field to verify that it has been **changed back** to expire in 90 days, also notice that the enforce password history has been changed back to "*3 passwords remembered*”. 
-
-#### **STEP 9**: View Risk Events from Initial Scan
-
-**After the initial load is complete**, we can click on the new application. Since we selected to have the CASB Cloud Service push the security control setting to Salesforce the new Salesforce instance should not have any violations and should appear in the low risk services category. 
- 
- > If we selected the "*Monitor Only*" option instead of the "*Push Controls and Monitor*" option in step 4 we would have had security control violations appear in the CASB dashboard for the Salesforce tenant after the initial scan. 
 
 ## **Exercise 3. Analyze Security Controls**
 ___
@@ -266,7 +259,7 @@ You will now see a message that indicates that the baseline has been updated. Cl
 
 #### **STEP 2**: Review security control violations 
 
-> ![](images/CASB/clock-icon.jpg) As mentioned , there will be a delay between the time the security control baseline is updated until the next scan of the Salesforce tenant's settings will be compared to the new baseline. Any violations will therefore not appear until the next scan takes effect. If you do not see any violations as described below move on to the next exercise and revisit this exercise once CASB has had a chance to do a fresh scan of Salesforce. **If you are following these instructions as part of a workshop you do not have to wait for the next CASB data collection run to take place before you can continue with this exercise. You can sign into the shared CASB tenant and complete the remainder of the exercise in the  shared tenant.** Individual login instructions were provided for each workshop participant. If you did not receive your instructions please inform one of the workshop proctors.
+> ![](images/CASB/clock-icon.jpg) As mentioned , there will be a delay between the time the security control baseline is updated until the next scan of the Salesforce tenant's settings will be compared to the new baseline. Any violations will therefore not appear until the next scan takes effect. 
 
 There should be an exclamation point icon in your Salesforce Tenant’s Application List badge indicating there are some new Risk Events we can evaluate for the application. Click, your recently on-boarded, application's badge, and then choose the “*View Details*” button from the "*Health Summary*" popup dialog.
 
@@ -312,6 +305,7 @@ In Salesforce navigate to: *Setup -> Security Controls -> Session Settings* and 
 ## **Exercise 4. Policies**
 ___
 ### **Overview**:
+
 A policy is a rule or a guideline, such as, "*only people in Finance can view files in the Finance folder*", or "*any change to network access rules must be reviewed*". You can define policies based on particular cloud services, resources in the service, actions on the resource, and optionally items such as actors, recipients, whole groups of users, domains, and IP addresses. In Oracle CASB Cloud Service, you define policies based on:
 
 * Particular cloud services, such as Box, GitHub, or ServiceNow.
@@ -339,6 +333,7 @@ Optionally, you can identify additional filters such as people or groups who per
 You can also add instructions for the person who reads the alert. For example, if you create an alert related to deleting access control lists, you can add instructions to inform the group that is responsible for managing the access control lists.
 
 You can set up email notifications when the alert is triggered. This supplement the ability of users to request notifications for all high-risk events in Setting Your Password, Time Zone, and Email Alerting.
+
 #### **STEP 1.1**: In the Oracle CASB Cloud Service console, select Configuration, select "*Policy Management*"
 
 ![](images/CASB/7337D326-E3D9-4201-BA7E-F27FA6FE90C6.png)
@@ -363,7 +358,7 @@ After adding this information, click on "*Next*".
 You can leave these settings as default (blank) and click the "*Next*" button
 > Exception: If the resource action is Login, you identify the user who is logging-in in the previous step (the Resources page) and skip this step.   
 
-#### **STEP 1.5**: Complete the "*Conditions*" panel
+#### **STEP 1.5**: (Optional) Complete the "*Conditions*" panel
 Specify conditions to limit when the alert is triggered. 
 Add two conditions: one condition for Device equal to "*Desktop*", and a second condition for Device equal to "*Mobile*" (use the “*Add condition*” link to add the second condition). After adding the two policy conditions, click "*Next*" to continue.
 
@@ -388,7 +383,7 @@ The Policy will appear in the list of policies available for activation for the 
 
 To test the policy log into the Salesforce account and perform an action on the *CEO* role that our new policy monitors.
  
- Log into your Salesforce Developer account and follow these steps to create a *CEO* role and assign a user to it (This will result in the CASB policy alert)
+ Log into your Salesforce Developer account ( **Do NOT log in with the dedicated CASB Salesforce user . Any action performed by this user in Salesforce will not be monitored by CASB**)  and follow these steps to create a *CEO* role and assign a user to it (This will result in the CASB policy alert)
  
  #### **STEP 2.1**:In the Salesforce "*Setup*" section navigate to *Users -> Roles*
  
@@ -410,11 +405,11 @@ To test the policy log into the Salesforce account and perform an action on the 
  ![](images/CASB/SFRole4.png)
  Search for a user and add the user to the role by selecting the "*Add*" button to move the user from the search results to the "*Selected Users for CEO*" selection box. 
 
- > Make sure the user you add to the CEO role is **not** the Service Account user we used to sign-in to Salesforce when we onboarded the application in Exercise 2 . The reason being that CASB Cloud Service will not monitor actions performed by that user so as to ensure that the actions CASB take in the persona of that user, to collect data from Salesforce, does not appear in the data CASB analize.
+ > Make sure the user you add to the CEO role is **not** the decicated CASB Service Account user we used to sign-in to Salesforce when we onboarded the application in Exercise 2 . The reason being that CASB Cloud Service will not monitor actions performed by that user so as to ensure that the actions CASB take in the persona of that user, to collect data from Salesforce, does not appear in the data CASB analize.
 
  Click the "*Save*" button 
 
-> ![](images/CASB/clock-icon.jpg) As noted before there is a delay between data collection cycles for the CASB service and the action you perform in Salesforce might not cause the policy alert in CASB to fire immediately but will appear on the next data collection that CASB does to the Salesforce tenant. **If you are following these instructions as part of a workshop you do not have to wait for the next CASB data collection run to take place before you can continue with this exercise. You can sign into the shared CASB tenant and complete the remainder of the exercise in the shared tenant.** Individual login instructions were provided for each participant if you did not receive your instructions please inform one of the workshop proctors.
+> ![](images/CASB/clock-icon.jpg) As noted before there is a delay between data collection cycles for the CASB service and the action you perform in Salesforce might not cause the policy alert in CASB to fire immediately but will appear on the next data collection that CASB does to the Salesforce tenant. 
 
 #### **STEP 3**: View the policy Alert
 Periodically, throughout the duration of the workshop, inspect the Salesforce application's policy alerts to verify that the policy alert associated with the policy you created in STEP 1 did in fact trigger (Refer to the note above concerning the delay in alerts appearing within CASB)  
@@ -423,9 +418,11 @@ Periodically, throughout the duration of the workshop, inspect the Salesforce ap
 
 ![](images/CASB/policy_triggered.png)
 
-## **Exercise 5. CASB Discovery**
+## **Exercise 5. ( Optional ) CASB Discovery**
 ___
 ### **Overview**:
+
+> At the time of writing CASB Discovery is not available in the CASB tenant you recieve when you sign up for a free Oracle Cloud Trial Account. 
 
 We will use Oracle CASB Cloud Service – Discovery to find applications that are not explicitly authorized, but are running in your environment and may present a security threat.
 
@@ -506,7 +503,7 @@ Oracle CASB Cloud Service monitors user and agent behavior and automatically gen
 
 ### **Exercise**:
 #### **STEP 1**: Add a blacklisted IP address.
-We will demonstrate how to blacklist an IP address. In the Oracle CASB menu (on the left- hand side), click on "*Configuration*" and then click on “*Manage IP addresses*” At the top of the screen you will notice three options: Blacklist, Whitelist, and Exception. In the Blacklist menu, click the “*Add IP Address*” menu item. You can choose to add an Individual Address or an Address Range. In our case, we'll add our own current IP address as an Individual Address.
+We will demonstrate how to blacklist an IP address. In the Oracle CASB navigation menu (on the left- hand side), click on "*Configuration*" and then click on “*Manage IP addresses*” At the top of the screen you will notice three options: Blacklist, Whitelist, and Exception. In the Blacklist menu, click the “*Add IP Address*” menu item. You can choose to add an Individual Address or an Address Range. In our case, we'll add our own current IP address as an Individual Address.
 >To discover your current IP address you can access this [link](https://www.bing.com/search?q=what+is+my+ip)
 
 ![](images/CASB/03-blacklist-ip.png)
@@ -519,8 +516,7 @@ When we log into Salesforce from your blacklisted IP we ensure that a future ris
 
 #### **STEP 3**: Analyze the resulting risk even starting from the dashboard
 
->![](images/CASB/clock-icon.jpg)The risk event will appear after the next scheduled data collection has occurred from your Salesforce tenant.  **If you are following these instructions as part of a workshop you do not have to wait for the next CASB data collection run to take place before you can continue with this exercise. You can log into the shared CASB tenant and complete the remainder of the exercise in the shared tenant.**
-Individual login instructions were provided for each participant. If you did not receive your instructions please inform one of the workshop proctors.
+>![](images/CASB/clock-icon.jpg)The risk event will appear after the next scheduled data collection has occurred from your Salesforce tenant. 
 
 Risk events that can be mapped to a geographic location (such as those that result from access from blacklisted IP addresses) are flagged on the Dashboard Access Map with red markers. 
 
@@ -625,7 +621,7 @@ The category filters are:
 
 * Other incident types are specialized versions of anomalous activities (threats).
 
-## **Exercise 6. Reports**
+
 ___
 
 
